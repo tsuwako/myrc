@@ -1,0 +1,119 @@
+#!/bin/zsh
+
+#setopt
+setopt appendhistory
+setopt noflowcontrol 
+setopt nolistbeep
+setopt autocd
+setopt autopushd
+setopt extendedglob
+setopt noclobber
+setopt nounset
+setopt numericglobsort
+setopt pushdminus
+setopt pushdsilent
+setopt pushdtohome
+setopt extendedhistory
+setopt sharehistory
+setopt ignoreeof
+
+#export PATH=$HOME/bin:/opt/local/sbin:/opt/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
+
+## print to screen's status line
+set LAST_CMD
+preexec () {
+    if [[ "$TERM" == "screen" ]]; then
+        ## This code means
+        ## w of (wr) .. to slice every words (separated spaces)
+        ## r of (wr) .. make array index (1,2,3,4,..., something like that)
+        ## ^ .. negate regex.
+        ## So, the total command means:
+        ## return the 1st word which does not match "*=*(like env), -*(like option), sudo, ..., or ssh"
+        LAST_CMD=${1[(wr)^(*=*|-*|sudo|slogin|rlogin|ssh)]}
+
+        ## To avoid over writing of hostname, logging in new host by screen command. 
+        ## and writing the hostname in the parent window name by screen command.
+        if [[ $LAST_CMD != "screen" && $LAST_CMD != "fg" ]]; then
+            echo -ne "\ek${LAST_CMD}(R)\e\\"
+        elif [[ $LAST_CMD != "fg" ]]; then
+            echo -ne "\ek`hostname -s`\e\\"
+        fi
+
+    fi
+}
+
+precmd () {
+	if [[ "$TERM" == "screen" && ${LAST_CMD:=zsh} != "zsh" && $LAST_CMD != "fg" ]]; then
+		echo -ne "\ek(D)${LAST_CMD}\e\\"
+	fi
+}
+
+## original func completion
+if [[ -d $HOME/.zsh/functions ]]; then
+	fpath=( $fpath $HOME/.zsh/functions )
+fi
+
+## default complete 
+autoload -U compinit
+compinit -u
+
+## keybind (emacs like)
+bindkey -e
+
+## global alias
+alias -g G='|grep'
+alias -g H='|head'
+alias -g L='|lv'
+alias -g N='2> /dev/null'
+alias -g T='|tail'
+
+## alias
+#alias rox='/usr/bin/rox; sleep 1; echo -n view rox | wmiir write /ctl'
+alias ls='ls -F --color=tty'
+alias l='ls -l'
+alias h='history'
+alias gd='dirs -v; echo "select number: " ; read newdir; cd -"$newdir"'
+alias warp='dirs -v;echo "setnumber:";read num;cd ~-$num'
+
+
+## END OF COMMON SETTINGS ##
+## From here, now i'll setup each own environment ##
+
+## USER case
+case `whoami` in
+	# i shouldn't do this, but i think this setting file is 
+	# just mine, so don't care :)
+	# in this case, i need to care the case of su from normal user...
+	root)
+		export PROMPT="$(whoami)@%m "
+		export RPROMPT='[%~]'
+		export EDITOR=vi
+#		export PAGER=lv
+		export LANG=C
+		export HISTFILE=~/.zhistory
+		export DIRSTACKSIZE=20
+		export HISTSIZE=500
+		export SAVEHIST=500
+		export PATH=$HOME/bin:/opt/local/sbin/:/opt/local/bin/:/usr/local/sbin:/usr/sbin:/sbin:$PATH
+	;;
+	mm)
+	;;
+esac
+
+## platform setting
+
+OS=`uname`
+case "$OS" in
+#case darwin
+	Darwin)
+		;;
+#case gnu/linux
+	Linux)
+  case `hostname` in
+    lennon)
+#      alias x-terminal-emulator='mlterm'
+#      alias mlterm='mlterm --ls=true'
+      ;;
+  esac
+		;;
+esac

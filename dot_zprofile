@@ -1,0 +1,53 @@
+#!/bin/zsh
+
+umask 022
+
+setopt promptsubst
+
+export WWW_HOME='http://www.google.co.jp'
+export PROMPT="$(whoami)@%m "
+export RPROMPT='[%~]'
+export EDITOR='vi'
+## pager setting
+export PAGER=more
+if [[ -x /usr/bin/lv ]]; then
+  export PAGER=lv
+elif [[ -x /usr/bin/less ]]; then
+  export PAGER=less
+fi
+
+export HISTFILE=~/.zhistory
+export DIRSTACKSIZE=20
+export HISTSIZE=500
+export SAVEHIST=500
+
+OS=`uname`
+case "$OS" in
+#case darwin(MacOS X)
+	Darwin)
+		export PATH=$HOME/bin:/opt/local/bin:/usr/bin:/bin:/opt/local/sbin:/usr/sbin:/sbin:/usr/X11R6/bin
+		export MANPATH=/opt/local/share/man:$MANPATH
+    exec screen
+		;;
+#case gnu/linux
+	Linux)
+    export PATH=/var/lib/gems/1.8/bin:$HOME/bin:$PATH 
+    ## write here, customizing linux
+    ;;
+esac
+
+## HERE is the Startup
+case "$TERM" in
+    screen)
+        echo -ne "\ek`hostname -s`\e\\"
+        ;;
+    ## For the setting of u-aizu
+    kterm)
+        echo -ne "\ek`hostname -s`\e\\"
+        export TERM=screen
+esac
+
+if [[ -e "/usr/bin/screen" && ("$TERM" = "mlterm" || "$TERM" = "xterm") ]]; then
+    exec /usr/bin/screen -RR
+fi
+
