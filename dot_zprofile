@@ -40,7 +40,7 @@ case "$OS" in
 		;;
 #case gnu/linux
 	Linux)
-    export PATH=/var/lib/gems/1.8/bin:$HOME/bin:$PATH 
+    export PATH=/var/lib/gems/1.8/bin:$HOME/local/bin:$HOME/bin:$PATH 
     ## write here, customizing linux
     ;;
 esac
@@ -60,3 +60,5 @@ if [[ -e "/usr/bin/screen" && ("$TERM" = "mlterm" || "$TERM" = "xterm") ]]; then
     exec /usr/bin/screen -RR
 fi
 
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
