@@ -4,10 +4,12 @@ umask 022
 
 setopt promptsubst
 
-export WWW_HOME='http://www.google.co.jp'
+## fundamental env
 export PROMPT="$(whoami)@%m "
 export RPROMPT='[%~]'
 export EDITOR='vi'
+export WWW_HOME='http://www.google.com'
+
 ## pager setting
 export PAGER=more
 if [[ -x /usr/bin/lv ]]; then
@@ -16,6 +18,7 @@ elif [[ -x /usr/bin/less ]]; then
   export PAGER=less
 fi
 
+## history setting
 export HISTFILE=~/.zhistory
 export DIRSTACKSIZE=20
 export HISTSIZE=500
@@ -30,35 +33,12 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-OS=`uname`
-case "$OS" in
-#case darwin(MacOS X)
-	Darwin)
-		export PATH=$HOME/bin:/opt/local/bin:/usr/bin:/bin:/opt/local/sbin:/usr/sbin:/sbin:/usr/X11R6/bin
-		export MANPATH=/opt/local/share/man:$MANPATH
-    exec screen
-		;;
-#case gnu/linux
-	Linux)
-    export PATH=/var/lib/gems/1.8/bin:$HOME/local/bin:$HOME/bin:$PATH 
-    ## write here, customizing linux
-    ;;
-esac
+## load paths
+[[ -d $HOME/local/bin ]] && export PATH=$HOME/local/bin:$PATH
+# [[ -d $HOME/bin ]] && export PATH=$HOME/bin:$PATH
 
-## HERE is the Startup
-case "$TERM" in
-    screen)
-        echo -ne "\ek`hostname -s`\e\\"
-        ;;
-    ## For the setting of u-aizu
-    kterm)
-        echo -ne "\ek`hostname -s`\e\\"
-        export TERM=screen
-esac
-
-if [[ -e "/usr/bin/screen" && ("$TERM" = "mlterm" || "$TERM" = "xterm") ]]; then
-    exec /usr/bin/screen -RR
-fi
-
-
+## load rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+## load pythonbrew
+[[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"

@@ -17,8 +17,6 @@ setopt extendedhistory
 setopt sharehistory
 setopt ignoreeof
 
-#export PATH=$HOME/bin:/opt/local/sbin:/opt/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
-
 ## print to screen's status line
 set LAST_CMD
 preexec () {
@@ -77,51 +75,11 @@ alias warp='dirs -v;echo "setnumber:";read num;cd ~-$num'
 
 
 ## END OF COMMON SETTINGS ##
-## From here, now i'll setup each own environment ##
-
-## USER case
-case `whoami` in
-	# i shouldn't do this, but i think this setting file is 
-	# just mine, so don't care :)
-	# in this case, i need to care the case of su from normal user...
-	root)
-		export PROMPT="$(whoami)@%m "
-		export RPROMPT='[%~]'
-		export EDITOR=vi
-#		export PAGER=lv
-		export LANG=C
-		export HISTFILE=~/.zhistory
-		export DIRSTACKSIZE=20
-		export HISTSIZE=500
-		export SAVEHIST=500
-		export PATH=$HOME/bin:/opt/local/sbin/:/opt/local/bin/:/usr/local/sbin:/usr/sbin:/sbin:$PATH
-	;;
-	mm)
-	;;
-esac
-
-## platform setting
-
-OS=`uname`
-case "$OS" in
-#case darwin
-	Darwin)
-		;;
-#case gnu/linux
-	Linux)
-  case `hostname` in
-    lennon)
-#      alias x-terminal-emulator='mlterm'
-#      alias mlterm='mlterm --ls=true'
-      ;;
-  esac
-		;;
-esac
 
 case $TERM in
   *xterm)
-    exec tmux
+    foreach c in tmux screen; do
+      [[ -x $(which ${c}) ]] && exec ${c}
+    done
     ;;
 esac
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
