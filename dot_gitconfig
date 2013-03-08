@@ -1,0 +1,9 @@
+[user]
+	name  = Manabu Morita
+	email = tsuwako@gmail.com
+[color]
+	ui = auto
+[merge]
+	tool = vimdiff
+[tig "color"]
+  cursor = yellow red bold
