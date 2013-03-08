@@ -1,0 +1,3 @@
+[submodule "dot_zsh/cdd"]
+	path = dot_zsh/cdd
+	url = git://github.com/tsuwako/cdd
