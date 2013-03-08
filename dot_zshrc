@@ -54,6 +54,11 @@ fi
 ## default complete 
 autoload -U compinit
 compinit -u
+source ~/.zsh/cdd
+
+function chpwd() {
+    _reg_pwd_screennum
+}
 
 ## keybind (emacs like)
 bindkey -e
