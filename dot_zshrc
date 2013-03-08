@@ -8,7 +8,7 @@ setopt autocd
 setopt autopushd
 setopt extendedglob
 setopt noclobber
-setopt nounset
+#setopt nounset
 setopt numericglobsort
 setopt pushdminus
 setopt pushdsilent
@@ -54,7 +54,7 @@ fi
 ## default complete 
 autoload -U compinit
 compinit -u
-source ~/.zsh/cdd
+source ~/.zsh/cdd/cdd
 
 function chpwd() {
     _reg_pwd_screennum
