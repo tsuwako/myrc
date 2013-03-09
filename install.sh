@@ -17,7 +17,7 @@ main() {
   DIR=`dirname $(expand_path $0)`
   for f in ${DIR}/dot_*; do
     linkname=`basename $f | sed -e 's/dot_\(.*\)$/\1/'`
-    ln -s $f $HOME/.$linkname
+    [[ ! -e ~/.$linkname ]] && ln -s $f ~/.$linkname
   done
 
   return 0
