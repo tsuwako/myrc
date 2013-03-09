@@ -82,7 +82,7 @@ alias warp='dirs -v;echo "setnumber:";read num;cd ~-$num'
 ## END OF COMMON SETTINGS ##
 
 case $TERM in
-  *xterm)
+  *xterm*)
     foreach c in tmux screen; do
       [[ -x $(which ${c}) ]] && exec ${c}
     done
