@@ -81,6 +81,8 @@ alias warp='dirs -v;echo "setnumber:";read num;cd ~-$num'
 
 ## END OF COMMON SETTINGS ##
 
+[[ -f $HOME/.zshrc.$(hostname) ]] && source $HOME/.zshrc.$(hostname)
+
 case $TERM in
   *xterm*)
     foreach c in tmux screen; do
