@@ -1,9 +1,9 @@
 #!/bin/sh
 
 expand_path() {
-  READLINK=`which readlink`
+  READLINK=`which greadlink`
   if [ ! -e ${READLINK} ]; then
-    READLINK=`which greadlink`
+    READLINK=`which readlink`
     if [ ! -e ${READLINK} ]; then
       echo "cannot find readlink: abort"
       exit 1
